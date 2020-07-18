@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { NpmService, FileSystemService } from '../../core';
 
+export interface InitializeArgs {
+  type: 'nest-express-api';
+}
+
 @Injectable()
 export class InitializeActionService {
   constructor(
@@ -9,7 +13,11 @@ export class InitializeActionService {
   ) {
   }
 
-  async installRequirements() {
+  async run(args: InitializeArgs) {
+
+  }
+
+  private async initializeNestExpress() {
     await this.npm.installPackages([
       `aws-lambda@^1.0.6`,
       `aws-serverless-express@^3.3.8`,
@@ -20,5 +28,14 @@ export class InitializeActionService {
       `swagger-ui-express@^4.1.4`
     ], 'save');
     
+    this.fileService.createDirectory(this.fileService.getCwdPath('cfn'));
+
+    this.fileService.createFile(
+      this.fileService.getCwdPath('cfn/.gitignore'),
+      [
+        `artifacts.zip`,
+        `*-transformed.yaml`,
+      ].join('\n')
+    )
   }
 }

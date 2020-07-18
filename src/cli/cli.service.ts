@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { argv } from 'yargs';
+import { InitializeArgs } from './cli-actions/initialize-action.service';
 
 enum CliAction {
   Initialize = 'init',
@@ -9,9 +10,16 @@ enum CliAction {
 @Injectable()
 export class CliService {
   parseArgs() {
-    console.log({ argv });
     const action = argv._?.[0]?.toLocaleLowerCase() as CliAction;
 
+    if (action === 'init') {
+      return {
+        action,
+        args: {
+          type: argv.type as any,
+        } as InitializeArgs,
+      }
+    }
     return { action };
   }
 }

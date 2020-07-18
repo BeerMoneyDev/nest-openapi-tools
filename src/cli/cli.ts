@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { CliModule } from './cli.module';
 import { CliService } from './cli.service';
+import { InitializeActionService } from './cli-actions/initialize-action.service';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(CliModule, {
@@ -8,6 +9,10 @@ async function bootstrap() {
   });
 
   const cliService = app.get(CliService);
-  cliService.parseArgs();
+  const args = cliService.parseArgs();
+
+  if (args.action === 'init') {
+    await app.get(InitializeActionService).run(args.args);
+  }
 }
 bootstrap();

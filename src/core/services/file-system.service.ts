@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as archiver from 'archiver';
 import * as rimraf from 'rimraf';
-import { createWriteStream, renameSync, existsSync } from 'fs';
+import { createWriteStream, renameSync, existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join, sep } from 'path';
 
 @Injectable()
@@ -24,6 +24,18 @@ export class FileSystemService {
 
   exists(sourceFolder: string) {
     return existsSync(sourceFolder);
+  }
+
+  createDirectory(folder: string) {
+    if (existsSync(folder)) {
+      return;
+    }
+  
+    mkdirSync(folder);
+  }
+
+  createFile(filePath: string, contents: string) {
+    writeFileSync(filePath, contents);
   }
 
   zipFolder(sourceFolders: string[], destinationZip: string) {
