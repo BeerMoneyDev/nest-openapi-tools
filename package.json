@@ -1,10 +1,9 @@
 {
   "name": "nest-aws-serverless-tools",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "description": "A collection of tools to make building and deploying AWS serverless Nest applications AWESOME.",
+  "author": "Kerry Ritter <ritter@kerryritter.com> (http://www.kerryritter.com)",
+  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -27,10 +26,12 @@
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/swagger": "^4.5.12",
-    "@openapitools/openapi-generator-cli": "^1.0.15-4.3.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.5.4",
+    "rxjs": "^6.5.4"
+  },
+  "peerDependencies": {
+    "@openapitools/openapi-generator-cli": "^1.0.15-4.3.1",
     "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
