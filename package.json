@@ -1,6 +1,6 @@
 {
   "name": "nest-aws-serverless-tools",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "A collection of tools to make building and deploying AWS serverless Nest applications AWESOME.",
   "author": "Kerry Ritter <ritter@kerryritter.com> (http://www.kerryritter.com)",
   "license": "MIT",
@@ -25,7 +25,8 @@
     "nest-aws-serverless-tools": "./bin/run"
   },
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
