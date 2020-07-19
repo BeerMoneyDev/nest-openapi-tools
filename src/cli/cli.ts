@@ -11,7 +11,7 @@ export async function run() {
   const cliService = app.get(CliService);
   const args = cliService.parseArgs();
 
-  if (args.action === 'init') {
+  if (['init', 'initialize'].includes(args.action)) {
     await app.get(InitializeActionService).run(args.args);
   }
 }

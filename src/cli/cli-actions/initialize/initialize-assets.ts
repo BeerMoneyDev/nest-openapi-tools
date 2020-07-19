@@ -42,7 +42,6 @@ export const createCloudFormationContents = (appName: string) => {
         Variables: {
           ENVIRONMENT: '!Ref Environment',
           NODE_ENV: '!Ref Environment',
-          LAMBDA_FUNCTION_RESOURCE_NAME: `${lambdaResourceName}`,
         },
       },
     },
@@ -58,7 +57,7 @@ export const createCloudFormationContents = (appName: string) => {
         'Fn::Transform': {
           Name: 'AWS::Include',
           Parameters: {
-            Location: 'swagger.yaml',
+            Location: 'openapi.yaml',
           },
         },
       },
@@ -150,31 +149,26 @@ runDeployment(async ({ fileSystem, npm, cfn }) => {
   await runDeploymentStep({
     stepName: 'Clearing artifacts',
     action: () => fileSystem.delete('cfn/artifacts.zip'),
-    disable: true,
   });
 
   await runDeploymentStep({
     stepName: 'Running clean NPM install',
     action: () => npm.cleanInstall(),
-    disable: true,
   });
 
   await runDeploymentStep({
     stepName: 'Running lint',
     action: () => npm.runScript('lint'),
-    disable: true,
   });
 
   await runDeploymentStep({
     stepName: 'Running build',
     action: () => npm.runScript('build'),
-    disable: true,
   });
 
   await runDeploymentStep({
     stepName: 'Running prune',
     action: () => npm.prune(true),
-    disable: true,
   });
 
   await runDeploymentStep({
@@ -185,7 +179,6 @@ runDeployment(async ({ fileSystem, npm, cfn }) => {
     ],
       fileSystem.getCwdPath('cfn/artifacts.zip')
     ),
-    disable: true,
   });
 
   await runDeploymentStep({
@@ -196,7 +189,6 @@ runDeployment(async ({ fileSystem, npm, cfn }) => {
       packageBucket: '${uploadResourceBucket}',
       profile: '${profile}',
     }),
-    // disable: true,
   });
 
   await runDeploymentStep({
@@ -210,7 +202,6 @@ runDeployment(async ({ fileSystem, npm, cfn }) => {
       template: fileSystem.getCwdPath('cfn/cloudformation-transformed.yaml'),
       capabilities: 'CAPABILITY_NAMED_IAM',
     }).promise,
-    // disable: true,
   });
 });
 `;
@@ -222,7 +213,7 @@ export const createParametersFileContents = (env: string) => {
       ParameterKey: 'Environment',
       ParameterValue: env,
     },
-  ]);
+  ] as Array<{ ParameterKey: string, ParameterValue: string}>);
 };
 
 export const createTagsFileContents = (appName: string) => {

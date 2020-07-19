@@ -1,9 +1,6 @@
 import { ApiExtension } from '@nestjs/swagger';
 
-export const ApiGatewayIntegration = (lambdaFunctionResourceName?: string) => {
-  lambdaFunctionResourceName =
-    lambdaFunctionResourceName ?? process.env.LAMBDA_FUNCTION_RESOURCE_NAME;
-
+export const ApiGatewayIntegration = (lambdaFunctionResourceName: string) => {
   const subArn = [
     'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/',
     `arn:aws:lambda:\${AWS::Region}:\${AWS::AccountId}:function:\${${lambdaFunctionResourceName}}/invocations`,

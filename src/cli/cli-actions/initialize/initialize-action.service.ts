@@ -16,13 +16,13 @@ export class InitializeActionService {
   ) {}
 
   async run(args: InitializeArgs) {
-    if (args.type === 'nest-express-api') {
+    if (args.type === 'nest-express-api' || true) {
       await this.initializeNestExpress();
     }
   }
 
   private async initializeNestExpress() {
-    const appName = await cli.prompt('App Name (PascalCase)');
+    const appName = await this.getAppName();
     const stackName = await this.getStackName(appName);
     const region = await this.getRegion();
     const profile = await this.getProfile();
@@ -37,7 +37,7 @@ export class InitializeActionService {
         assets.createCloudFormationContents(appName),
       ],
       [
-        join('cfn', 'swagger.yaml'),
+        join('cfn', 'openapi.yaml'),
         assets.createSwaggerContents(stackName),
       ],
       [
@@ -67,9 +67,11 @@ export class InitializeActionService {
     }
 
     const packages = [
+      `nest-aws-serverless-tools`,
       `aws-lambda@^1.0.6`,
       `aws-serverless-express@^3.3.8`,
       `@nestjs/common@^7.0.0`,
+      "@nestjs/config@^0.5.0",
       `@nestjs/core@^7.0.0`,
       `@nestjs/platform-express@^7.3.2`,
       `@nestjs/swagger@^4.5.12`,
@@ -83,7 +85,7 @@ export class InitializeActionService {
     this.npm.addScript('deploy', 'node ./cfn/deploy');
     this.npm.addScript('openapi', 'ts-node src/main --openapi-generate');
     this.npm.addTopLevelConfig('openApi', {
-      filePath: './cfn/swagger.yaml',
+      filePath: './cfn/openapi.yaml',
       clientOutputFolderPath: './angular-client/',
       clientAdditionalProperties: [
         `apiModulePrefix=${appName}`,
@@ -98,6 +100,11 @@ export class InitializeActionService {
       parametersFilePath: "./cfn/parameters-dev.json"
     });
     cli.action.start('Completed package.json update!');
+  }
+
+  private async getAppName() {
+    // TODO: pull a default from package.json
+    return await cli.prompt('App Name (PascalCase)');
   }
 
   private async getStackName(appName: string) {
