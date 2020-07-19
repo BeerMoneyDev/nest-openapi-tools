@@ -25,8 +25,7 @@ export class ApiGatewayOpenApi {
   constructor(
     private readonly openApiFileGenerator: OpenApiFileGeneratorService,
     private readonly openApiAngularClientGenerator: OpenApiAngularClientGeneratorService,
-  ) {
-  }
+  ) {}
 
   setNestAppContext(
     app: INestApplication,
@@ -87,7 +86,7 @@ export class ApiGatewayOpenApi {
     await this.openApiAngularClientGenerator.generateAngularClient(
       this.options.filePath,
       this.options.clientOutputFolderPath,
-      this.options.clientAdditionalProperties
+      this.options.clientAdditionalProperties,
     );
 
     return this;
@@ -117,18 +116,18 @@ export class ApiGatewayOpenApi {
 
   private async parsePackageJson(): Promise<ApiGatewayOpenApiOptions> {
     const packageJson = readPackageJson<{
-      name: string,
-      description: string,
-      author: string,
-      version: string,
+      name: string;
+      description: string;
+      author: string;
+      version: string;
       openApi: {
-        docsWebServerRoot: string,
-        filePath: string,
-        apiBaseUrl: string,
-        clientOutputFolderPath: string,
-        clientModulePrefix: string,
-        clientAdditionalProperties: string,
-      }
+        docsWebServerRoot: string;
+        filePath: string;
+        apiBaseUrl: string;
+        clientOutputFolderPath: string;
+        clientModulePrefix: string;
+        clientAdditionalProperties: string;
+      };
     }>();
 
     const authorSplits = packageJson.author?.split(' ');
@@ -181,7 +180,9 @@ export class ApiGatewayOpenApi {
         'Apache 2.0',
         'http://www.apache.org/licenses/LICENSE-2.0.html',
       )
-      .addServer(this.options?.apiBaseUrl ?? 'https://virtserver.swaggerhub.com')
+      .addServer(
+        this.options?.apiBaseUrl ?? 'https://virtserver.swaggerhub.com',
+      )
       .addTag(this.options?.title, this.options?.description);
 
     if (this.customOptionsModifier) {

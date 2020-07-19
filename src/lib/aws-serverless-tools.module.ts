@@ -9,9 +9,6 @@ import { OpenApiAngularClientGeneratorService } from './openapi-angular-client-g
     OpenApiFileGeneratorService,
     OpenApiAngularClientGeneratorService,
   ],
-  exports: [
-    ApiGatewayOpenApi,
-  ]
+  exports: [ApiGatewayOpenApi],
 })
-export class AwsServerlessToolsModule {
-}
+export class AwsServerlessToolsModule {}

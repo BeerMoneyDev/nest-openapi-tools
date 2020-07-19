@@ -25,9 +25,42 @@ export class NpmService {
   }
 
   prune(production?: boolean) {
-    return this.runCommand(production 
-      ? `npm prune --production`
-      : `npm prune`);
+    return this.runCommand(production ? `npm prune --production` : `npm prune`);
+  }
+
+  addScript(key: string, command: string) {
+    try {
+      const packageJson = JSON.parse(this.fileSystem.readFile('package.json'));
+      packageJson.scripts = packageJson.scripts ?? {};
+      packageJson.scripts[key] = command;
+      this.fileSystem.writeFile(
+        'package.json',
+        JSON.stringify(packageJson, null, 2),
+      );
+    } catch (e) {
+      if (e.message?.includes('ENOENT, no such file or directory')) {
+        throw new Error('You are not in a package.json folder.');
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  addTopLevelConfig(key: string, object: any) {
+    try {
+      const packageJson = JSON.parse(this.fileSystem.readFile('package.json'));
+      packageJson[key] = object;
+      this.fileSystem.writeFile(
+        'package.json',
+        JSON.stringify(packageJson, null, 2),
+      );
+    } catch (e) {
+      if (e.message?.includes('ENOENT, no such file or directory')) {
+        throw new Error('You are not in a package.json folder.');
+      } else {
+        throw e;
+      }
+    }
   }
 
   private runCommand(cmd: string) {

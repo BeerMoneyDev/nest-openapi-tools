@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import * as archiver from 'archiver';
 import * as rimraf from 'rimraf';
-import { createWriteStream, renameSync, existsSync, mkdirSync, writeFileSync } from 'fs';
+import {
+  createWriteStream,
+  renameSync,
+  existsSync,
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+} from 'fs';
 import { join, sep } from 'path';
 
 @Injectable()
@@ -15,7 +22,7 @@ export class FileSystemService {
   }
 
   delete(path: string) {
-    return new Promise((res, rej) => rimraf(path, (e) => (e ? rej(e) : res())));
+    return new Promise((res, rej) => rimraf(path, e => (e ? rej(e) : res())));
   }
 
   rename(sourceFolder: string, destinationFolder: string) {
@@ -30,12 +37,16 @@ export class FileSystemService {
     if (existsSync(folder)) {
       return;
     }
-  
+
     mkdirSync(folder);
   }
 
-  createFile(filePath: string, contents: string) {
+  writeFile(filePath: string, contents: string) {
     writeFileSync(filePath, contents);
+  }
+
+  readFile(filePath: string) {
+    return readFileSync(filePath).toString();
   }
 
   zipFolder(sourceFolders: string[], destinationZip: string) {
@@ -44,11 +55,11 @@ export class FileSystemService {
 
     return new Promise((resolve, reject) => {
       output.on('close', () => resolve());
-      archive.on('error', (err) => reject(err));
+      archive.on('error', err => reject(err));
 
       archive.pipe(output);
       sourceFolders.forEach(sf => {
-        archive.directory(sf, sf.split(sep).pop())
+        archive.directory(sf, sf.split(sep).pop());
       });
       archive.finalize();
     });

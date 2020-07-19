@@ -9,7 +9,9 @@ describe('OpenApiAngularClientGeneratorService', () => {
       providers: [OpenApiAngularClientGeneratorService],
     }).compile();
 
-    service = module.get<OpenApiAngularClientGeneratorService>(OpenApiAngularClientGeneratorService);
+    service = module.get<OpenApiAngularClientGeneratorService>(
+      OpenApiAngularClientGeneratorService,
+    );
   });
 
   it('should be defined', () => {

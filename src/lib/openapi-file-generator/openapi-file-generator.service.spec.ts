@@ -9,7 +9,9 @@ describe('OpenApiFileGeneratorService', () => {
       providers: [OpenApiFileGeneratorService],
     }).compile();
 
-    service = module.get<OpenApiFileGeneratorService>(OpenApiFileGeneratorService);
+    service = module.get<OpenApiFileGeneratorService>(
+      OpenApiFileGeneratorService,
+    );
   });
 
   it('should be defined', () => {

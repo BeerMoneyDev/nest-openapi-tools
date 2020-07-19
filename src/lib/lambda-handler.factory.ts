@@ -12,7 +12,11 @@ function isApiGatewayEvent(event: any): event is APIGatewayProxyEvent {
   return event.resource;
 }
 
-async function createLambdaProxy(module: any, options: NestApplicationOptions, nestAppConfigurator: (nestApp: INestApplication) => void) {
+async function createLambdaProxy(
+  module: any,
+  options: NestApplicationOptions,
+  nestAppConfigurator: (nestApp: INestApplication) => void,
+) {
   if (!lambdaProxy) {
     const expressServer = express();
     const nestApp = await NestFactory.create(
@@ -26,14 +30,18 @@ async function createLambdaProxy(module: any, options: NestApplicationOptions, n
     }
 
     await nestApp.init();
-    
+
     lambdaProxy = createServer(expressServer);
   }
 
   return lambdaProxy;
 }
 
-export function createExpressHandler(module: any, options?: NestApplicationOptions, nestAppConfigurator?: (nestApp: INestApplication) => void) {
+export function createExpressHandler(
+  module: any,
+  options?: NestApplicationOptions,
+  nestAppConfigurator?: (nestApp: INestApplication) => void,
+) {
   return async (event: any, context: Context): Promise<any> => {
     if (!isApiGatewayEvent(event)) {
       throw new Error(`Cannot process this event type! ${JSON.parse(event)}`);

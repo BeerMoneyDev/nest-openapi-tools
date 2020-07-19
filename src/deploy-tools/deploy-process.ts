@@ -1,4 +1,4 @@
-import cli, { ActionBase } from 'cli-ux'
+import cli, { ActionBase } from 'cli-ux';
 import { NestFactory } from '@nestjs/core';
 import { DeployToolsModule } from './deploy-tools.module';
 import { NpmService, FileSystemService, CloudFormationService } from '../core';
@@ -9,13 +9,18 @@ interface Services {
   cfn: CloudFormationService;
   cli: {
     action: ActionBase;
-    error: (input: string | Error, options?: {
+    error: (
+      input: string | Error,
+      options?: {
         exit?: number;
-    }) => never;
+      },
+    ) => never;
   };
 }
 
-export async function runDeployment(action: (services: Services) => Promise<unknown>) {
+export async function runDeployment(
+  action: (services: Services) => Promise<unknown>,
+) {
   const app = await NestFactory.createApplicationContext(DeployToolsModule, {
     logger: false,
   });
@@ -25,14 +30,14 @@ export async function runDeployment(action: (services: Services) => Promise<unkn
     npm: app.get(NpmService),
     fileSystem: app.get(FileSystemService),
     cfn: app.get(CloudFormationService),
-  })
-};
+  });
+}
 
 export async function runDeploymentStep(options: {
-  stepName: string,
-  continueOnError?: boolean,
-  disable?: true,
-  action: () => Promise<unknown>,
+  stepName: string;
+  continueOnError?: boolean;
+  disable?: true;
+  action: () => Promise<unknown>;
 }) {
   if (options?.disable) {
     if (options?.stepName?.length) {

@@ -62,11 +62,13 @@ export class CloudFormationService {
         progress.next({ status: 'error', details: err });
 
         const errorMessage = JSON.stringify(err);
-        if ([
+        if (
+          [
             'Resource is not in the state',
             `Can't update stack when status is`,
-          ].some(x => errorMessage.includes(x))
-          && await cli.confirm(`Stack in an invalid state. Delete stack?`)) {
+          ].some(x => errorMessage.includes(x)) &&
+          (await cli.confirm(`Stack in an invalid state. Delete stack?`))
+        ) {
           await this.deleteStack(options);
           return this.deploy(options);
         } else {

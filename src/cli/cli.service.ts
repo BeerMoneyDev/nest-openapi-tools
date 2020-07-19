@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { argv } from 'yargs';
-import { InitializeArgs } from './cli-actions/initialize-action.service';
+import { InitializeArgs } from './cli-actions/initialize/initialize-action.service';
 
 enum CliAction {
   Initialize = 'init',
@@ -18,7 +18,7 @@ export class CliService {
         args: {
           type: argv.type as any,
         } as InitializeArgs,
-      }
+      };
     }
     return { action };
   }

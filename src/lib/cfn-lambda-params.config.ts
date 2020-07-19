@@ -21,16 +21,16 @@ interface CloudFormationDefinition {
 export const CloudFormationLambdaParametersConfig = () => {
   const packageJson = readPackageJson<{
     cfnLambdaParamsConfig: {
-      cfnFilePath: string,
-      parametersFilePath: string,
-      lambdaResourceName: string,
-    }
+      cfnFilePath: string;
+      parametersFilePath: string;
+      lambdaResourceName: string;
+    };
   }>();
 
   const {
     cfnFilePath,
     parametersFilePath,
-    lambdaResourceName
+    lambdaResourceName,
   } = packageJson?.cfnLambdaParamsConfig;
 
   if (!existsSync(cfnFilePath) || !existsSync(parametersFilePath)) {
