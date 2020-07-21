@@ -2,36 +2,11 @@
 
 In alpha mode. Maybe pre-alpha. Docs coming soon.
 
-
-## CLI 
-
-### Installation
-
-`npm install -g nest-aws-serverless-tools`
-
-### Basic Use
-
-#### Initialization
-
-In the same folder as package.json, run the following command:
-
-`nest-aws-serverless-tools init --type=nest-express-api`
-
-This script does the following:
-
-1. Obtains required details about your API and CloudFormation app.
-2. Scaffolds a `cfn` directory with the CloudFormation template, a bare-bones OpenApi file, a parameters file, a tags file, and a deployment script for local use (CI/CD support & documentation coming). Also generates a `src/lambda-entry-point.ts` file for the Lambda bootstrapping.
-3. Installs required packages to support AWS and OpenApi tooling.
-4. Configures the `deploy` and `openapi` NPM scripts.
-5. Adds configuration for the `CloudFormationLambdaParametersConfig` tool and the OpenAPI generation tool.
-
-## Nest Module & Tools
-
 #### Installation
 
-If you did not use the `init` process from the CLI, the tools package can be installed directly:
+If you did not use the `init` process from the `@aws-serverless-tools/cli` package, the tools package can be installed directly:
 
-`npm install --save nest-aws-serverless-tools`
+`npm install --save @aws-serverless-tools/cli`
 
 ### AwsServerlessToolsModule
 

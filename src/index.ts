@@ -1,5 +1,3 @@
-export * from './deploy-tools/deploy-process';
-
 export * from './lib/api-gateway-integration.decorator';
 export * from './lib/api-gateway-openapi-options.interface';
 export * from './lib/api-gateway-openapi.service';
