@@ -1,5 +1,3 @@
-import { DocumentBuilder } from '@nestjs/swagger';
-
 export interface ApiGatewayOpenApiOptions {
   title: string;
   description: string;

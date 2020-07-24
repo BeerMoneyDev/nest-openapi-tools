@@ -1,6 +1,5 @@
 {
   "name": "@aws-serverless-tools/nest",
-  "version": "0.0.1-alpha",
   "description": "A collection of tools to make building and deploying AWS serverless Nest applications AWESOME.",
   "author": "Kerry Ritter <ritter@kerryritter.com> (http://www.kerryritter.com)",
   "license": "MIT",
@@ -39,6 +38,8 @@
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/swagger": "^4.5.12",
     "@nestjs/testing": "^7.0.0",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
     "@types/aws-lambda": "^8.10.59",
     "@types/aws-serverless-express": "^3.3.3",
     "@types/express": "^4.17.7",
@@ -55,6 +56,7 @@
     "eslint-plugin-import": "^2.20.1",
     "jest": "26.0.1",
     "prettier": "^2.0.5",
+    "semantic-release": "^17.1.1",
     "supertest": "^4.0.2",
     "swagger-ui-express": "^4.1.4",
     "ts-jest": "26.1.0",
@@ -71,6 +73,81 @@
     "@nestjs/platform-express": "^7.3.2",
     "@nestjs/swagger": "^4.5.12",
     "swagger-ui-express": "^4.1.4"
+  },
+  "release": {
+    "branch": "master",
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "angular",
+          "releaseRules": [
+            {
+              "type": "docs",
+              "scope": "README",
+              "release": "patch"
+            },
+            {
+              "type": "refactor",
+              "release": "patch"
+            },
+            {
+              "type": "feature",
+              "release": "patch"
+            },
+            {
+              "type": "chore",
+              "release": "patch"
+            },
+            {
+              "type": "style",
+              "release": "patch"
+            },
+            {
+              "type": "breaking",
+              "release": "major"
+            }
+          ],
+          "parserOpts": {
+            "noteKeywords": [
+              "BREAKING CHANGE",
+              "BREAKING CHANGES"
+            ]
+          }
+        }
+      ],
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": true,
+          "tarballDir": "dist"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "package-lock.json",
+            "CHANGELOG.md"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ],
+      [
+        "@semantic-release/github",
+        {
+          "assets": "dist/*.tgz"
+        }
+      ]
+    ]
   },
   "jest": {
     "moduleFileExtensions": [
