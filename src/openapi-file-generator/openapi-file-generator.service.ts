@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OpenAPIObject } from '@nestjs/swagger';
-import { stringify as yamlStringify } from 'yaml';
 import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class OpenApiFileGeneratorService {
@@ -15,15 +15,16 @@ export class OpenApiFileGeneratorService {
       delete swaggerDoc.components;
     }
 
-    if (filePath.toLocaleLowerCase().endsWith('.yaml')) {
-      const swaggerYaml = yamlStringify(swaggerDoc).replace(
-        `Version: 2012-10-17`,
-        `Version: '2012-10-17'`,
-      );
-      writeFileSync(filePath, swaggerYaml);
+    const fullPath = join(process.cwd(), filePath);
+    if (fullPath.toLocaleLowerCase().endsWith('.yaml')) {
+      const yaml = await import('yaml');
+      const swaggerYaml = yaml
+        .stringify(swaggerDoc)
+        .replace(`Version: 2012-10-17`, `Version: '2012-10-17'`);
+      writeFileSync(fullPath, swaggerYaml);
     } else {
       const swaggerJson = JSON.stringify(swaggerDoc);
-      writeFileSync(filePath, swaggerJson);
+      writeFileSync(fullPath, swaggerJson);
     }
   }
 }
