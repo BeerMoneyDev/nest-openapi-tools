@@ -54,6 +54,8 @@
     "eslint-plugin-import": "^2.20.1",
     "jest": "26.0.1",
     "prettier": "^2.0.5",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
     "semantic-release": "^17.1.1",
     "supertest": "^4.0.2",
     "swagger-ui-express": "^4.1.4",
