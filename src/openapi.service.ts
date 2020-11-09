@@ -1,4 +1,4 @@
-import { DocumentBuilder, SwaggerModule, OpenAPIObject } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule, OpenAPIObject, SwaggerDocumentOptions } from '@nestjs/swagger';
 import { INestApplication, Injectable } from '@nestjs/common';
 import { OpenApiFileGeneratorService } from './openapi-file-generator/openapi-file-generator.service';
 import {
@@ -30,26 +30,27 @@ export class OpenApiService {
     private readonly openApiClientGenerator: OpenApiClientGeneratorService,
   ) {}
 
-  async configure(app: INestApplication, options: OpenApiOptions) {
+  async configure(app: INestApplication, toolsOptions: OpenApiOptions, swaggerOptions?: SwaggerDocumentOptions) {
     const document = SwaggerModule.createDocument(
       app,
-      options.documentBuilder.build(),
+      toolsOptions.documentBuilder.build(),
+      swaggerOptions,
     );
 
-    if (options.webServerOptions.enabled) {
+    if (toolsOptions.webServerOptions.enabled) {
       this.enableDocumentationWebServer(
         app,
         document,
-        options.webServerOptions,
+        toolsOptions.webServerOptions,
       );
     }
 
-    if (options.fileGeneratorOptions.enabled) {
-      await this.generateOpenApiFile(document, options.fileGeneratorOptions);
+    if (toolsOptions.fileGeneratorOptions.enabled) {
+      await this.generateOpenApiFile(document, toolsOptions.fileGeneratorOptions);
     }
 
-    if (options.clientGeneratorOptions.enabled) {
-      await this.generateClient(options.clientGeneratorOptions);
+    if (toolsOptions.clientGeneratorOptions.enabled) {
+      await this.generateClient(toolsOptions.clientGeneratorOptions);
     }
   }
 
