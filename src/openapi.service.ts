@@ -1,15 +1,18 @@
-import { DocumentBuilder, SwaggerModule, OpenAPIObject, SwaggerDocumentOptions } from '@nestjs/swagger';
+import {
+  DocumentBuilder,
+  SwaggerModule,
+  OpenAPIObject,
+  SwaggerDocumentOptions,
+} from '@nestjs/swagger';
 import { INestApplication, Injectable } from '@nestjs/common';
-import { OpenApiFileGeneratorService } from './openapi-file-generator/openapi-file-generator.service';
+import {
+  OpenApiFileGeneratorOptions,
+  OpenApiFileGeneratorService,
+} from './openapi-file-generator/openapi-file-generator.service';
 import {
   OpenApiClientGeneratorOptions,
   OpenApiClientGeneratorService,
 } from './openapi-client-generator/openapi-client-generator.service';
-
-export interface OpenApiFileGeneratorOptions {
-  enabled: boolean;
-  outputFilePath: string;
-}
 
 export interface OpenApiWebServerOptions {
   enabled: boolean;
@@ -18,9 +21,9 @@ export interface OpenApiWebServerOptions {
 
 export interface OpenApiOptions {
   documentBuilder: DocumentBuilder;
-  clientGeneratorOptions: OpenApiClientGeneratorOptions;
-  fileGeneratorOptions: OpenApiFileGeneratorOptions;
-  webServerOptions: OpenApiWebServerOptions;
+  clientGeneratorOptions?: OpenApiClientGeneratorOptions;
+  fileGeneratorOptions?: OpenApiFileGeneratorOptions;
+  webServerOptions?: OpenApiWebServerOptions;
 }
 
 @Injectable()
@@ -30,14 +33,18 @@ export class OpenApiService {
     private readonly openApiClientGenerator: OpenApiClientGeneratorService,
   ) {}
 
-  async configure(app: INestApplication, toolsOptions: OpenApiOptions, swaggerOptions?: SwaggerDocumentOptions) {
+  async configure(
+    app: INestApplication,
+    toolsOptions: OpenApiOptions,
+    swaggerOptions?: SwaggerDocumentOptions,
+  ) {
     const document = SwaggerModule.createDocument(
       app,
       toolsOptions.documentBuilder.build(),
       swaggerOptions,
     );
 
-    if (toolsOptions.webServerOptions.enabled) {
+    if (toolsOptions?.webServerOptions?.enabled) {
       this.enableDocumentationWebServer(
         app,
         document,
@@ -45,11 +52,14 @@ export class OpenApiService {
       );
     }
 
-    if (toolsOptions.fileGeneratorOptions.enabled) {
-      await this.generateOpenApiFile(document, toolsOptions.fileGeneratorOptions);
+    if (toolsOptions?.fileGeneratorOptions?.enabled) {
+      await this.generateOpenApiFile(
+        document,
+        toolsOptions.fileGeneratorOptions,
+      );
     }
 
-    if (toolsOptions.clientGeneratorOptions.enabled) {
+    if (toolsOptions?.clientGeneratorOptions?.enabled) {
       await this.generateClient(toolsOptions.clientGeneratorOptions);
     }
   }
@@ -66,10 +76,7 @@ export class OpenApiService {
     document: OpenAPIObject,
     options: OpenApiFileGeneratorOptions,
   ) {
-    await this.openApiFileGenerator.generateOpenApiFile(
-      options.outputFilePath,
-      document,
-    );
+    await this.openApiFileGenerator.generateOpenApiFile(options, document);
   }
 
   private async generateClient(options: OpenApiClientGeneratorOptions) {

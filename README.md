@@ -65,6 +65,8 @@ async function bootstrap() {
       openApiFilePath: './openapi.yaml', // or ./openapi.json
       skipValidation: true, // optional, false by default
     },
+  }, {
+    operationIdFactory: (c: string, method: string) => method,
   });
 
   await app.listen(3000);

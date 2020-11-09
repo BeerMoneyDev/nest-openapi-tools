@@ -13,6 +13,9 @@ export class OpenApiNestFactory {
     const openApiToolsModule = await NestFactory.createApplicationContext(
       OpenApiToolsModule,
     );
-    await openApiToolsModule.get(OpenApiService).configure(app, toolsOptions, swaggerOptions);
+
+    await openApiToolsModule
+      .get(OpenApiService)
+      .configure(app, toolsOptions, swaggerOptions);
   }
 }

@@ -2,12 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { OpenAPIObject } from '@nestjs/swagger';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import {
+  AwsExtensionsOptions,
+  AwsExtensionsService,
+} from '../aws-extensions/aws-extensions.service';
+
+export interface OpenApiFileGeneratorOptions {
+  enabled: boolean;
+  outputFilePath: string;
+  aws?: AwsExtensionsOptions;
+}
 
 @Injectable()
 export class OpenApiFileGeneratorService {
-  async generateOpenApiFile(filePath: string, openApiDoc: OpenAPIObject) {
-    if (!filePath?.length) {
-      throw new Error('filePath is not defined.');
+  constructor(private readonly awsExtensionsService: AwsExtensionsService) {}
+
+  async generateOpenApiFile(
+    options: OpenApiFileGeneratorOptions,
+    openApiDoc: OpenAPIObject,
+  ) {
+    if (!options.outputFilePath?.length) {
+      throw new Error('outputFilePath is not defined.');
+    }
+
+    if (options?.aws?.enabled) {
+      this.awsExtensionsService.addApiGatewayIntegrations(
+        options.aws,
+        openApiDoc,
+      );
     }
 
     const swaggerDoc = JSON.parse(JSON.stringify(openApiDoc));
@@ -15,7 +37,8 @@ export class OpenApiFileGeneratorService {
       delete swaggerDoc.components;
     }
 
-    const fullPath = join(process.cwd(), filePath);
+    const fullPath = join(process.cwd(), options.outputFilePath);
+
     if (fullPath.toLocaleLowerCase().endsWith('.yaml')) {
       const yaml = await import('yaml');
       const swaggerYaml = yaml
