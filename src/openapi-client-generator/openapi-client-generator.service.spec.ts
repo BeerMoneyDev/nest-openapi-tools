@@ -15,6 +15,6 @@ describe('OpenApiClientGeneratorService', () => {
   });
 
   it('should be defined', () => {
-    // TODO
+    expect(service).toBeDefined();
   });
 });
