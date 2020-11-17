@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { AwsExtensionsService } from '../aws-extensions/aws-extensions.service';
 import { OpenApiFileGeneratorService } from './openapi-file-generator.service';
 
 describe('OpenApiFileGeneratorService', () => {
@@ -6,7 +7,7 @@ describe('OpenApiFileGeneratorService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [OpenApiFileGeneratorService],
+      providers: [OpenApiFileGeneratorService, AwsExtensionsService],
     }).compile();
 
     service = module.get<OpenApiFileGeneratorService>(

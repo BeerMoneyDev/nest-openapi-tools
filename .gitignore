@@ -1,3 +1,5 @@
+.npmrc
+
 # compiled output
 /dist
 /node_modules
@@ -16,6 +18,7 @@ lerna-debug.log*
 # Tests
 /coverage
 /.nyc_output
+test/openapi.yaml
 
 # IDEs and editors
 /.idea

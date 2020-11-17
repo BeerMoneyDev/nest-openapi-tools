@@ -1,158 +1,88 @@
-# Nest AWS Serverless Tools
+# Nest OpenAPI Tools
 
-In alpha mode. Maybe pre-alpha. Docs coming soon.
+This library provides basic tooling around OpenAPI integrations with NestJS.
 
-#### Installation
+# Installation
 
-If you did not use the `init` process from the `@aws-serverless-tools/cli` package, the tools package can be installed directly:
-
-`npm install --save @aws-serverless-tools/cli`
-
-### AwsServerlessToolsModule
-
-This module simplifies the following:
-
-1. Enabling an OpenAPI documentation web server side-by-side with your API (at `/apidocs` by default).
-2. Generating an OpenAPI specification file.
-3. Generating an Angular client module.
-
-#### Setup
-
-##### Module import
-
-First, import the module into your AppModule.
-
-```ts
-// app.module.ts
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AwsServerlessToolsModule } from 'nest-aws-serverless-tools';
-
-@Module({
-  imports: [
-    AwsServerlessToolsModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}
+```bash
+npm install -g @openapitools/openapi-generator-cli # Used to generate OpenAPI clients from documents.
+npm install --save nest-openapi-tools @nestjs/swagger swagger-ui-express
 ```
 
-Once imported, update the `main.ts` file to retrieve the `ApiGatewayOpenApi` service and start the document server.
+# Usage
 
-##### Generation - Option A: Always generate on bootstrap
+## OpenApiNestFactory
 
-With this approach, every build will update the OpenAPI specification file and generate an Angular client.
+The OpenApiNestFactory simplifies the process of:
+
+1. Generating an OpenAPI file.
+2. Generating a client project (i.e. an Angular client module).
+3. Starting up the OpenAPI documentation web server.
+
+### How to use
+
+To leverage this functionality, swap out the `NestFactory` provided by Nest with the `OpenApiNestFactory.configure()` call as demonstrated below.
 
 ```ts
-// main.ts
-
+// main.ts - BEFORE
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ApiGatewayOpenApi } from 'nest-aws-serverless-tools';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+```ts
+// main.ts - AFTER
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { OpenApiNestFactory } from '@aws-serverless-tools/nest';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const openApi = await app.get(ApiGatewayOpenApi)
-    .setNestAppContext(app)
-    .enableDocumentationWebServer();
-  await openApi.generateOpenApiFile();
-  await openApi.generateAngularClient();
+  await OpenApiNestFactory.configure(app, {
+    documentBuilder: new DocumentBuilder()
+      .setDescription('My API')
+      .addBearerAuth(),
+    webServerOptions: {
+      enabled: true,
+      path: 'api-docs',
+    },
+    fileGeneratorOptions: {
+      enabled: true,
+      outputFilePath: './openapi.yaml',  // or ./openapi.json
+    },
+    clientGeneratorOptions: {
+      enabled: true,
+      type: 'typescript-axios',
+      outputFolderPath: '../typescript-api-client/src',
+      additionalProperties:
+        'apiPackage=clients,modelPackage=models,withoutPrefixEnums=true,withSeparateModelsAndApi=true',
+      openApiFilePath: './openapi.yaml', // or ./openapi.json
+      skipValidation: true, // optional, false by default
+    },
+  }, {
+    operationIdFactory: (c: string, method: string) => method,
+  });
 
   await app.listen(3000);
 }
 bootstrap();
 ```
 
-##### Generation - Option B: Only generate when the --openapi-generate flag is used (i.e. in `npm run openapi`)
+In this example, we will (a) enable the documentation web server at http://localhost:3000, (b) generate the OpenAPI document at `./openapi.yaml`, and lastly (c) generate a TypeScript API client.
 
-This is the recommended option. This will generate the OpenAPI specification file and Angular client but only when --openapi-generate is passed to the command.
+*Note*, file generation and client generation should be disabled in production as they are costly to startup time.
 
-```ts
-// main.ts
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ApiGatewayOpenApi } from 'nest-aws-serverless-tools';
+### Generator Options
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+This project leverages the [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator) project via the npm package, `@openapitools/openapi-generator-cli` which is required to be installed globally. Accordingly, any client generators and configuration supported by this project are usable via Nest OpenAPI Tools.
 
-  const openApi = await app.get(ApiGatewayOpenApi)
-    .setNestAppContext(app)
-    .enableDocumentationWebServer();
+# Stay in touch
 
-  if (!(await openApi.handleGenerateCommand(true, true))) {
-    await app.listen(3000);
-  }
-}
-bootstrap();
-```
-
-#### Configuration
-
-In `package.json`, there are the following configuration options pre-enabled:
-
-```json
-{
-  "openApi": {
-    "filePath": "./cfn/openapi.yaml",
-    "clientOutputFolderPath": "./angular-client/",
-    "clientAdditionalProperties": "apiModulePrefix=KerryTest,fileNaming=kebab-case,stringEnums=true,taggedUnions=true"
-  }
-}
-```
-
-* **docsWebServerRoot**: The root at which to run the OpenAPI webserver. Default: "apidocs".
-* **filePath**: The path to the OpenAPI specification file.
-* **apiBaseUrl**: The host or base URL to the API for the Angular client to use by default.
-* **clientOutputFolderPath**: The relative path to the Angular client output.;
-* **clientModulePrefix**: The prefix of the Angular module, i.e. `${clientModulePrefix}ApiModule`.
-* **clientAdditionalProperties**: Additional Angular client generation configuration. See https://openapi-generator.tech/docs/generators/typescript-angular/ for more options.
-
-
-### CloudFormationLambdaParametersConfig
-
-When running your Lambda in AWS, you'll likely environment variables for configuration. However, maintaining these variables in `process.env` can be cumbersome. 
-
-`CloudFormationLambdaParametersConfig` is a loader for the `@nestjs/config` package to look at your CloudFormation file, cross-reference your Lambda environment variables to a specified parameters file, and make them available via the `nestjs/config` ConfigService.
-
-Note that since this uses `@nestjs/config`, you are free to use `.env` files or any other configuration you see fit for secrets or other configuration options not managed via parameters.
-
-#### Setup
-
-##### ConfigModule Import
-
-Add the `@nestjs/config` ConfigModule to your AppModule imports.
-
-```ts
-// main.ts
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AwsServerlessToolsModule, CloudFormationLambdaParametersConfig } from 'nest-aws-serverless-tools';
-
-@Module({
-  imports: [
-    AwsServerlessToolsModule,
-    ConfigModule.forRoot({
-      load: [CloudFormationLambdaParametersConfig],
-      isGlobal: true,
-    }),
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}
-```
-
-## Stay in touch
-
-- Author - [Kerry Ritter](http://kerryritter.com)
-- Twitter - [@kerryritter](https://twitter.com/kerryritter)
-
-## License
-
-  Nest is [MIT licensed](LICENSE).
+Author - Kerry Ritter, BeerMoneyDev
+Website - https://www.kerryritter.com/, https://www.beermoney.dev/
