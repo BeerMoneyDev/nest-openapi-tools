@@ -19,7 +19,7 @@ export class OpenApiClientGeneratorService {
 
     await new Promise((resolve, reject) => {
       const command = [
-        `openapi-generator-cli generate`,
+        `npx openapi-generator-cli generate`,
         `-g ${options.type}`,
         `-i \"${options.openApiFilePath}\"`,
         `-o \"${options.outputFolderPath}\"`,
