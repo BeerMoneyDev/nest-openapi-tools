@@ -20,7 +20,6 @@ export interface OpenApiWebServerOptions {
 }
 
 export interface OpenApiOptions {
-  documentBuilder: DocumentBuilder;
   clientGeneratorOptions?: OpenApiClientGeneratorOptions;
   fileGeneratorOptions?: OpenApiFileGeneratorOptions;
   webServerOptions?: OpenApiWebServerOptions;
@@ -35,12 +34,13 @@ export class OpenApiService {
 
   async configure(
     app: INestApplication,
+    documentBuilder: DocumentBuilder,
     toolsOptions: OpenApiOptions,
-    swaggerOptions?: SwaggerDocumentOptions,
+    swaggerOptions: SwaggerDocumentOptions,
   ) {
     const document = SwaggerModule.createDocument(
       app,
-      toolsOptions.documentBuilder.build(),
+      documentBuilder.build(),
       swaggerOptions,
     );
 

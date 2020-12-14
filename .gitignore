@@ -1,4 +1,7 @@
 .npmrc
+test/*.yaml
+openapi.yaml
+openapitools.json
 
 # compiled output
 /dist

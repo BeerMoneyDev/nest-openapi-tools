@@ -32,12 +32,10 @@ export class OpenApiClientGeneratorService {
       const cmd = spawn(command, { stdio: 'inherit', shell: true });
       cmd.on('error', () =>
         reject(
-          `Error running openapi-generator-cli command. Is '@openapitools/openapi-generator-cli' installed globally?`,
+          `Error running openapi-generator-cli command.`,
         ),
       );
       cmd.on('exit', resolve);
     });
-
-    return this;
   }
 }

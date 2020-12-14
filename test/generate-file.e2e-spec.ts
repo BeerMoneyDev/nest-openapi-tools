@@ -1,12 +1,12 @@
 import { Controller, Get, Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { ApiResponse, DocumentBuilder } from '@nestjs/swagger';
+import { ApiOkResponse, DocumentBuilder } from '@nestjs/swagger';
 import { OpenApiNestFactory } from '../src';
 
 @Controller()
 class AppController {
   @Get('')
-  @ApiResponse({
+  @ApiOkResponse({
     type: 'string'
   })
   hello() {
@@ -20,16 +20,32 @@ class AppController {
 export class AppModule {}
 
 describe('OpenApiToolsModule', () => {
-  it('should generate AWS extensions in the YAML file as expected', async () => {
+  fit('should generate YAML file from defaults', async () => {
+    jest.setTimeout(15000);
+
     const app = await NestFactory.create(AppModule);
   
-    await OpenApiNestFactory.configure(app, {
-      documentBuilder: new DocumentBuilder()
-        .setDescription('My API')
+    await OpenApiNestFactory.configure(
+      app,
+      new DocumentBuilder()
+        .setTitle('My API')
         .addBearerAuth(),
+    );
+  });
+
+  it('should generate AWS extensions in the YAML file as expected', async () => {
+    jest.setTimeout(15000);
+
+    const app = await NestFactory.create(AppModule);
+  
+    await OpenApiNestFactory.configure(app,
+      new DocumentBuilder()
+        .setTitle('My API')
+        .addBearerAuth(),
+      {
       fileGeneratorOptions: {
         enabled: true,
-        outputFilePath: './test/openapi.yaml',
+        outputFilePath: './test/openapi-override.yaml',
         aws: {
           enabled: true,
           apiGatewayExtensionOptions: {
