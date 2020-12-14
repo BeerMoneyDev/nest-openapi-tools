@@ -1,3 +1,10 @@
+# [3.0.0](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v2.0.0...v3.0.0) (2020-12-14)
+
+
+### Features
+
+* **openapi-generator-cli-dependency:** removing global installation requirement for the generator cli ([08ce585](https://github.com/BeerMoneyDev/nest-openapi-tools/commit/08ce585e6d9559c4420b2e48edec0d28d3de3528))
+
 # [2.0.0](https://github.com/aws-serverless-tools/nest/compare/v1.0.0...v2.0.0) (2020-11-17)
 
 
