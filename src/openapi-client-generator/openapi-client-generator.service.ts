@@ -7,6 +7,7 @@ export interface OpenApiClientGeneratorOptions {
   openApiFilePath: string;
   outputFolderPath: string;
   additionalProperties?: string;
+  globalProperty?: string;
   skipValidation?: boolean;
 }
 
@@ -25,6 +26,9 @@ export class OpenApiClientGeneratorService {
         `-o \"${options.outputFolderPath}\"`,
         options?.additionalProperties?.length
           ? `--additional-properties=\"${options.additionalProperties}\"`
+          : '',
+        options?.globalProperty?.length
+          ? `--global-property=\"${options.globalProperty}\"`
           : '',
         options?.skipValidation ? `--skip-validate-spec` : '',
       ].join(' ');
