@@ -26,9 +26,9 @@
   "peerDependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
-    "@nestjs/platform-express": "^8.3.2",
+    "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.0.0",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.1.1",
@@ -157,6 +157,6 @@
   },
   "version": "4.0.0",
   "dependencies": {
-    "@openapitools/openapi-generator-cli": "^2.4.2"
+    "@openapitools/openapi-generator-cli": "^2.4.3"
   }
 }
