@@ -26,8 +26,8 @@ export class AwsExtensionsService {
           httpMethod: 'POST',
           uri: {
             'Fn::Sub': [
-              'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/',
-              'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:',
+              'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/',
+              'arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:',
               `\${${options.apiGatewayExtensionOptions.lambdaResourceName}}/invocations`,
             ].join(''),
           },
