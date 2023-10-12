@@ -157,7 +157,7 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "version": "5.0.1",
+  "version": "6.0.0",
   "dependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0"
   }
