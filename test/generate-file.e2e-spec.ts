@@ -1,13 +1,15 @@
 import { Controller, Get, Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ApiOkResponse, DocumentBuilder } from '@nestjs/swagger';
+import * as fs from 'fs/promises';
+import * as yaml from 'yaml';
 import { OpenApiNestFactory } from '../src';
 
 @Controller()
 class AppController {
   @Get('')
   @ApiOkResponse({
-    type: 'string'
+    type: 'string',
   })
   hello() {
     return 'Hello';
@@ -20,42 +22,63 @@ class AppController {
 export class AppModule {}
 
 describe('OpenApiToolsModule', () => {
-  fit('should generate YAML file from defaults', async () => {
+  it('should generate YAML file from defaults', async () => {
+    // arrange
     jest.setTimeout(15000);
 
     const app = await NestFactory.create(AppModule);
-  
+
+    // act
     await OpenApiNestFactory.configure(
       app,
-      new DocumentBuilder()
-        .setTitle('My API')
-        .addBearerAuth(),
+      new DocumentBuilder().setTitle('My API').addBearerAuth(),
     );
+
+    // assert
+    const file = await fs.readFile('./openapi.yaml', 'utf8');
+    const yamlObj = yaml.parse(file);
+    expect(yamlObj).toMatchObject({ info: { title: 'My API' } });
   });
 
   it('should generate AWS extensions in the YAML file as expected', async () => {
+    // arrange
     jest.setTimeout(15000);
 
     const app = await NestFactory.create(AppModule);
-  
-    await OpenApiNestFactory.configure(app,
-      new DocumentBuilder()
-        .setTitle('My API')
-        .addBearerAuth(),
+
+    // act
+    await OpenApiNestFactory.configure(
+      app,
+      new DocumentBuilder().setTitle('My API').addBearerAuth(),
       {
-      fileGeneratorOptions: {
-        enabled: true,
-        outputFilePath: './test/openapi-override.yaml',
-        aws: {
+        fileGeneratorOptions: {
           enabled: true,
-          apiGatewayExtensionOptions: {
+          outputFilePath: './test/openapi-override.yaml',
+          aws: {
             enabled: true,
-            lambdaResourceName: 'MyLambda',
+            apiGatewayExtensionOptions: {
+              enabled: true,
+              lambdaResourceName: 'MyLambda',
+              addPolicy: true,
+              vpceIdParamName: 'MyVpceId',
+            },
           },
         },
       },
-    }, {
-      operationIdFactory: (c: string, method: string) => method,
+    );
+
+    // assert
+    const file = await fs.readFile('./test/openapi-override.yaml', 'utf8');
+    const yamlObj = yaml.parse(file);
+    expect(yamlObj).toMatchObject({ info: { title: 'My API' } });
+    expect(yamlObj['x-amazon-apigateway-policy']).toBeDefined();
+    expect(yamlObj.servers).toContainEqual({
+      'x-amazon-apigateway-endpoint-configuration': {
+        vpcEndpointIds: [{ 'Fn::Ref': 'MyVpceId' }],
+      },
     });
+    expect(
+      yamlObj.paths['/']['get']['x-amazon-apigateway-integration'],
+    ).toBeDefined();
   });
 });
