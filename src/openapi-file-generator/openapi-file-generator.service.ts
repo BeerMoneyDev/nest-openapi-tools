@@ -30,6 +30,20 @@ export class OpenApiFileGeneratorService {
         options.aws,
         openApiDoc,
       );
+
+      if (options?.aws?.apiGatewayExtensionOptions?.addPolicy) {
+        this.awsExtensionsService.addApiGatewayPolicyExtension(
+          options.aws,
+          openApiDoc,
+        );
+      }
+
+      if (options?.aws?.apiGatewayExtensionOptions?.vpceIdParamName) {
+        this.awsExtensionsService.addVpceServerExtension(
+          options.aws,
+          openApiDoc,
+        );
+      }
     }
 
     const swaggerDoc = JSON.parse(JSON.stringify(openApiDoc));

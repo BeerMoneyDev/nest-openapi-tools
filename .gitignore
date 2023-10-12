@@ -1,4 +1,3 @@
-.npmrc
 test/*.yaml
 openapi.yaml
 openapitools.json

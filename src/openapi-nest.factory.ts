@@ -12,48 +12,52 @@ export class OpenApiNestFactory {
     toolsOptions?: OpenApiOptions,
     swaggerOptions?: SwaggerDocumentOptions,
   ) {
-
-    const openApiToolsModule = await NestFactory.createApplicationContext(
-      OpenApiToolsModule,
-    );
+    const openApiToolsModule =
+      await NestFactory.createApplicationContext(OpenApiToolsModule);
 
     if (!toolsOptions) {
       toolsOptions = {};
     }
 
-    if (!toolsOptions.webServerOptions) {
+    if (toolsOptions?.webServerOptions?.enabled) {
       toolsOptions.webServerOptions = {
-        enabled: true,
-        path: 'api-docs',
+        ...{ path: 'api-docs' },
+        ...toolsOptions.webServerOptions,
       };
     }
 
-    if (!toolsOptions.fileGeneratorOptions) {
+    if (toolsOptions?.fileGeneratorOptions?.enabled) {
       toolsOptions.fileGeneratorOptions = {
-        enabled: true,
-        outputFilePath: './openapi.yaml',
+        ...{
+          outputFilePath: './openapi.yaml',
+        },
+        ...toolsOptions.fileGeneratorOptions,
       };
     }
 
-    if (!toolsOptions.clientGeneratorOptions) {
-      let outputFolderPath = new AxiosClientGeneratorOptions().outputFolderPath;
-      try {
-        const title = documentBuilder.build()
-          .info
-          .title;
-        if (title.length) {
-          const slugifiedTitle = title
-            .toString()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-            .trim()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w-]+/g, '')
-            .replace(/--+/g, '-');
-          outputFolderPath = `../${slugifiedTitle}-client/src`;
-        }
-      } catch {}
+    if (toolsOptions?.clientGeneratorOptions?.enabled) {
+      let outputFolderPath =
+        toolsOptions?.clientGeneratorOptions?.outputFolderPath;
+
+      if (outputFolderPath?.length) {
+        outputFolderPath = new AxiosClientGeneratorOptions().outputFolderPath;
+        try {
+          const title = documentBuilder.build().info.title;
+          if (title.length) {
+            const slugifiedTitle = title
+              .toString()
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+              .trim()
+              .replace(/\s+/g, '-')
+              .replace(/[^\w-]+/g, '')
+              .replace(/--+/g, '-');
+            outputFolderPath = `../${slugifiedTitle}-client/src`;
+          }
+        } catch {}
+      }
+
       toolsOptions.clientGeneratorOptions = new AxiosClientGeneratorOptions({
         outputFolderPath,
       });
