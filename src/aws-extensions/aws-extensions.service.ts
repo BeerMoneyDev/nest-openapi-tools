@@ -51,7 +51,7 @@ export class AwsExtensionsService {
       openApiDoc.servers.push({
         'x-amazon-apigateway-endpoint-configuration': {
           vpcEndpointIds: [
-            { 'Fn::Ref': options.apiGatewayExtensionOptions?.vpceIdParamName },
+            { Ref: options.apiGatewayExtensionOptions?.vpceIdParamName },
           ],
         },
       } as any);
