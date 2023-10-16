@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.0...v6.0.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* It's `Ref` not `Fn::Ref` ([3024639](https://github.com/BeerMoneyDev/nest-openapi-tools/commit/3024639e30f16f41f2bbac8438c9a548c095949f))
+
 # [6.0.0](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v5.0.1...v6.0.0) (2023-10-12)
 
 ## [5.0.1](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v5.0.0...v5.0.1) (2023-02-14)
