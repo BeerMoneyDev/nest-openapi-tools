@@ -74,7 +74,7 @@ describe('OpenApiToolsModule', () => {
     expect(yamlObj['x-amazon-apigateway-policy']).toBeDefined();
     expect(yamlObj.servers).toContainEqual({
       'x-amazon-apigateway-endpoint-configuration': {
-        vpcEndpointIds: [{ 'Fn::Ref': 'MyVpceId' }],
+        vpcEndpointIds: [{ Ref: 'MyVpceId' }],
       },
     });
     expect(
