@@ -1,3 +1,10 @@
+## [6.0.2](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.1...v6.0.2) (2023-11-09)
+
+
+### Bug Fixes
+
+* **openapi-nest.factory:** Correct condition for outputFolderPath ([1795835](https://github.com/BeerMoneyDev/nest-openapi-tools/commit/179583560366b7e139416fb9b1e72fe9f9437ce6))
+
 ## [6.0.1](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.0...v6.0.1) (2023-10-16)
 
 
