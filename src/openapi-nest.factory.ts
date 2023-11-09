@@ -39,7 +39,7 @@ export class OpenApiNestFactory {
       let outputFolderPath =
         toolsOptions?.clientGeneratorOptions?.outputFolderPath;
 
-      if (outputFolderPath?.length) {
+      if (!outputFolderPath?.length) {
         outputFolderPath = new AxiosClientGeneratorOptions().outputFolderPath;
         try {
           const title = documentBuilder.build().info.title;
