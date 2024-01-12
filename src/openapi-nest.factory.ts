@@ -59,6 +59,7 @@ export class OpenApiNestFactory {
       }
 
       toolsOptions.clientGeneratorOptions = new AxiosClientGeneratorOptions({
+        ...toolsOptions.clientGeneratorOptions,
         outputFolderPath,
       });
     }
