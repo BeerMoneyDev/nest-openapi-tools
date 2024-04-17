@@ -1,3 +1,10 @@
+## [6.0.3](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.2...v6.0.3) (2024-04-17)
+
+
+### Bug Fixes
+
+* **OpenApiNestFactory:** nullcheck and unit tests for client generator options ([c2252c2](https://github.com/BeerMoneyDev/nest-openapi-tools/commit/c2252c2034314de1ff5f32fb600c98375718e6dc))
+
 ## [6.0.2](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.1...v6.0.2) (2023-11-09)
 
 
