@@ -35,7 +35,7 @@ describe('OpenApiToolsModule', () => {
     );
 
     // assert
-    const file = await fs.readFile('./openapi.yaml', 'utf8');
+    const file = await fs.readFile('./test/openapi-override.yaml', 'utf8');
     const yamlObj = yaml.parse(file);
     expect(yamlObj).toMatchObject({ info: { title: 'My API' } });
   });
