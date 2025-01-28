@@ -3,6 +3,7 @@ import {
   SwaggerModule,
   OpenAPIObject,
   SwaggerDocumentOptions,
+  SwaggerCustomOptions,
 } from '@nestjs/swagger';
 import { INestApplication, Injectable } from '@nestjs/common';
 import {
@@ -17,6 +18,7 @@ import {
 export interface OpenApiWebServerOptions {
   enabled: boolean;
   path: string;
+  customOptions?: SwaggerCustomOptions;
 }
 
 export interface OpenApiOptions {
@@ -69,7 +71,7 @@ export class OpenApiService {
     document: OpenAPIObject,
     options: OpenApiWebServerOptions,
   ) {
-    SwaggerModule.setup(options.path ?? 'apidocs', app, document);
+    SwaggerModule.setup(options.path ?? 'apidocs', app, document, options.customOptions);
   }
 
   private async generateOpenApiFile(
