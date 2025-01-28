@@ -1,3 +1,5 @@
+## [6.0.5](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.4...v6.0.5) (2025-01-28)
+
 ## [6.0.4](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.3...v6.0.4) (2024-11-10)
 
 ## [6.0.3](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.2...v6.0.3) (2024-04-17)
