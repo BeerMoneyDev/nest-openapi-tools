@@ -27,7 +27,7 @@
     "@nestjs/common": "10 - 11",
     "@nestjs/core": "10 - 11",
     "@nestjs/platform-express": "10 - 11",
-    "@nestjs/swagger": "^8.0.0",
+    "@nestjs/swagger": "8 - 11",
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
