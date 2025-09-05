@@ -1,3 +1,11 @@
+## [6.0.6](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.5...v6.0.6) (2025-09-05)
+
+
+### Bug Fixes
+
+* **peerDependencies:** Expand the range of allowable versions of nestjs. ([2ef36d0](https://github.com/BeerMoneyDev/nest-openapi-tools/commit/2ef36d02d1239c7ee951acd5d90268f68a7a2d47))
+* **peerDependencies:** Expand the range of allowable versions of nestjs. ([0158c47](https://github.com/BeerMoneyDev/nest-openapi-tools/commit/0158c47dfb3ed7abfc7676c29e6d4059c6fcb89c))
+
 ## [6.0.5](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.4...v6.0.5) (2025-01-28)
 
 ## [6.0.4](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.3...v6.0.4) (2024-11-10)
