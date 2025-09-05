@@ -1,3 +1,10 @@
+## [6.0.7](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.6...v6.0.7) (2025-09-05)
+
+
+### Bug Fixes
+
+* **peerDependencies:** Expand the range of allowable versions of nestjs/swagger. ([f70e7fd](https://github.com/BeerMoneyDev/nest-openapi-tools/commit/f70e7fda33813c581eedc1c31d9d71499c94729e))
+
 ## [6.0.6](https://github.com/BeerMoneyDev/nest-openapi-tools/compare/v6.0.5...v6.0.6) (2025-09-05)
 
 
